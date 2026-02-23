@@ -154,7 +154,7 @@
       const hrUl = document.createElement("ul");
       formCategories["人事與行政"].forEach(form => {
         const li = document.createElement("li");
-        li.innerHTML = `${form.icon} <a href="Forms/${form.file}" download="${form.file}">${form.name}</a>`;
+        li.innerHTML = `${form.icon} <a href="Forms/${form.file}" target="_blank">${form.name}</a>`;
         hrUl.appendChild(li);
       });
       hrDiv.appendChild(hrUl);
@@ -168,7 +168,7 @@
       const marketingUl = document.createElement("ul");
       formCategories["市場部"].forEach(form => {
         const li = document.createElement("li");
-        li.innerHTML = `${form.icon} <a href="Forms/${form.file}" download="${form.file}">${form.name}</a>`;
+        li.innerHTML = `${form.icon} <a href="Forms/${form.file}" target="_blank">${form.name}</a>`;
         marketingUl.appendChild(li);
       });
       marketingDiv.appendChild(marketingUl);

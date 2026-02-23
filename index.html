@@ -90,7 +90,7 @@
         { name: "差旅申請表", file: "travel_request.pdf", icon: "✈️" },
         { name: "費用報銷表", file: "expense_reimbursement.pdf", icon: "💰" }
       ],
-      "行銷部": [
+      "市場部": [
         { name: "活動簡報表單", file: "campaign_brief.pdf", icon: "📢" },
         { name: "專案啟動檢核表", file: "project_kickoff_checklist.pdf", icon: "🚀" },
         { name: "活動報名表", file: "event_registration.pdf", icon: "📝" },
@@ -154,21 +154,21 @@
       const hrUl = document.createElement("ul");
       formCategories["人事與行政"].forEach(form => {
         const li = document.createElement("li");
-        li.innerHTML = `${form.icon} <a href="Forms/${form.file}" target="_blank">${form.name}</a>`;
+        li.innerHTML = `${form.icon} <a href="Forms/${form.file}" download="${form.file}">${form.name}</a>`;
         hrUl.appendChild(li);
       });
       hrDiv.appendChild(hrUl);
 
-      // 行銷部
+      // 市場部
       const marketingDiv = document.createElement("div");
       marketingDiv.className = "category";
       const marketingTitle = document.createElement("h3");
-      marketingTitle.textContent = "行銷部";
+      marketingTitle.textContent = "市場部";
       marketingDiv.appendChild(marketingTitle);
       const marketingUl = document.createElement("ul");
-      formCategories["行銷部"].forEach(form => {
+      formCategories["市場部"].forEach(form => {
         const li = document.createElement("li");
-        li.innerHTML = `${form.icon} <a href="Forms/${form.file}" target="_blank">${form.name}</a>`;
+        li.innerHTML = `${form.icon} <a href="Forms/${form.file}" download="${form.file}">${form.name}</a>`;
         marketingUl.appendChild(li);
       });
       marketingDiv.appendChild(marketingUl);

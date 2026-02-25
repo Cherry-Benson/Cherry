@@ -177,7 +177,7 @@
     }
 
     function startLogoutTimer() {
-      let remaining = 1800;
+      let remaining = 600;
       updateCountdown(remaining);
 
       const countdownInterval = setInterval(() => {
@@ -190,7 +190,7 @@
         }
       }, 1000);
 
-      setTimeout(logout, 1800 * 1000);
+      setTimeout(logout, 600 * 1000);
     }
 
     function updateCountdown(seconds) {

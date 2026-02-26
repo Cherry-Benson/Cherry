@@ -45,7 +45,7 @@
     a:hover { text-decoration: underline; }
     input[type="password"] { padding: 10px; font-size: 16px; }
     button { padding: 10px 20px; font-size: 16px; margin-left: 10px; cursor: pointer; }
-    #countdown { color: red; font-weight: bold; margin-top: 20px; }
+    #sessionMsg { color: red; font-weight: bold; margin-top: 20px; }
 
     .month-section {
       display: flex;
@@ -55,7 +55,7 @@
       text-align: left;
     }
     .category {
-      width: 48%;
+      width: 32%;   /* three per row */
       margin-bottom: 20px;
     }
   </style>
@@ -79,7 +79,7 @@
     </div>
 
     <div id="fileSection"></div>
-    <p id="countdown"></p>
+    <p id="sessionMsg"></p>
   </div>
 
   <script>
@@ -88,25 +88,11 @@
     const formCategories = {
       "人事與行政": [
         { name: "門市文具訂購申請表格", file: "門市文具訂購申請表格.pdf", icon: "👤" },
-        { name: "請假申請表", file: "leave_application.pdf", icon: "📅" },
-        { name: "差旅申請表", file: "travel_request.pdf", icon: "✈️" },
-        { name: "費用報銷表", file: "expense_reimbursement.pdf", icon: "💰" }
       ],
       "市場部": [
-        { name: "活動簡報表單", file: "campaign_brief.pdf", icon: "📢" },
-        { name: "專案啟動檢核表", file: "project_kickoff_checklist.pdf", icon: "🚀" },
-        { name: "活動報名表", file: "event_registration.pdf", icon: "📝" },
         { name: "video", file: "Video.zip", icon: "✔️" }
       ],
       "銷售與營運部": [
-        { name: "銷售報告表", file: "sales_report.pdf", icon: "📈" },
-        { name: "營運計劃表", file: "operations_plan.pdf", icon: "📊" },
-        { name: "客戶回饋表", file: "customer_feedback.pdf", icon: "💬" }
-      ],
-      "資訊科技部": [
-        { name: "系統維護申請表", file: "system_maintenance.pdf", icon: "💻" },
-        { name: "帳號申請表", file: "account_request.pdf", icon: "🔑" },
-        { name: "故障回報表", file: "incident_report.pdf", icon: "⚠️" }
       ]
     };
 
@@ -131,7 +117,7 @@
       yearSelect.innerHTML = "";
 
       const currentYear = new Date().getFullYear();
-      for (let y = currentYear; y <= currentYear + 2; y++) {
+      for (let y = currentYear; y <= currentYear + 3; y++) {
         const option = document.createElement("option");
         option.value = y;
         option.textContent = y;
@@ -177,27 +163,9 @@
     }
 
     function startLogoutTimer() {
-      let remaining = 600;
-      updateCountdown(remaining);
-
-      const countdownInterval = setInterval(() => {
-        remaining -= 1;
-        if (remaining > 0) {
-          updateCountdown(remaining);
-        } else {
-          clearInterval(countdownInterval);
-          logout();
-        }
-      }, 1000);
-
-      setTimeout(logout, 600 * 1000);
-    }
-
-    function updateCountdown(seconds) {
-      const minutes = Math.floor(seconds / 60);
-      const secs = seconds % 60;
-      document.getElementById("countdown").textContent =
-        `工作階段將於 ${minutes}分 ${secs}秒 後到期。`;
+      document.getElementById("sessionMsg").textContent =
+        "工作階段將於 8 分鐘後自動登出。";
+      setTimeout(logout, 480 * 1000);
     }
 
     function logout() {
@@ -206,7 +174,7 @@
       document.getElementById("fileSection").innerHTML = "";
       document.getElementById("passwordInput").value = "";
       document.getElementById("errorMsg").textContent = "工作階段已到期，請重新登入。";
-      document.getElementById("countdown").textContent = "工作階段已到期。";
+      document.getElementById("sessionMsg").textContent = "";
     }
   </script>
 </body>

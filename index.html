@@ -185,7 +185,7 @@
 
     function startLogoutTimer() {
       document.getElementById("sessionMsg").textContent =
-        "工作階段將於 10 分鐘後自動登出。";
+        "工作階段將於 10 分鐘後自動登出 或 點選右上角的「手動退出」按鈕退出。";
       setTimeout(() => logout(true), 600 * 1000);
     }
 

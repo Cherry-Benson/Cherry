@@ -58,6 +58,22 @@
       width: 32%;   /* three per row */
       margin-bottom: 20px;
     }
+    #logoutBtn {
+      position: fixed;   /* 固定在畫面 */
+      top: 15px;
+      right: 15px;
+      background-color: #d9534f;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      padding: 8px 16px;
+      cursor: pointer;
+      display: none;
+      z-index: 9999; /* 確保在最上層 */
+    }
+    #logoutBtn:hover {
+      background-color: #c9302c;
+    }
   </style>
 </head>
 <body>
@@ -82,6 +98,9 @@
     <p id="sessionMsg"></p>
   </div>
 
+  <!-- 固定在右上角的登出按鈕 -->
+  <button id="logoutBtn">手動登出</button>
+
   <script>
     const months = ["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"];
     
@@ -97,6 +116,7 @@
     };
 
     document.getElementById("submitBtn").addEventListener("click", checkPassword);
+    document.getElementById("logoutBtn").addEventListener("click", confirmLogout);
 
     function checkPassword() {
       const input = document.getElementById("passwordInput").value;
@@ -104,6 +124,7 @@
       if (input === correctPassword) {
         document.getElementById("loginSection").style.display = "none";
         document.getElementById("yearSelector").style.display = "block";
+        document.getElementById("logoutBtn").style.display = "inline-block";
         populateYears();
         renderFiles();
         startLogoutTimer();
@@ -164,17 +185,29 @@
 
     function startLogoutTimer() {
       document.getElementById("sessionMsg").textContent =
-        "工作階段將於 8 分鐘後自動登出。";
-      setTimeout(logout, 480 * 1000);
+        "工作階段將於 10 分鐘後自動登出。";
+      setTimeout(() => logout(true), 600 * 1000);
     }
 
-    function logout() {
+    function confirmLogout() {
+      const confirmAction = confirm("確定要登出嗎？");
+      if (confirmAction) {
+        logout(false); // 手動登出，不顯示訊息
+      }
+    }
+
+    function logout(auto = true) {
       document.getElementById("loginSection").style.display = "block";
       document.getElementById("yearSelector").style.display = "none";
       document.getElementById("fileSection").innerHTML = "";
       document.getElementById("passwordInput").value = "";
-      document.getElementById("errorMsg").textContent = "工作階段已到期，請重新登入。";
+      document.getElementById("logoutBtn").style.display = "none";
       document.getElementById("sessionMsg").textContent = "";
+      if (auto) {
+        document.getElementById("errorMsg").textContent = "工作階段已到期，請重新登入。";
+      } else {
+        document.getElementById("errorMsg").textContent = ""; // 手動登出不顯示訊息
+      }
     }
   </script>
 </body>

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CS 檔案上傳</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-color: #f4f4f4;
+      color: #333;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .container {
+      max-width: 800px;
+      width: 100%;
+      background: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      text-align: center;
+      opacity: 0;
+      animation: fadeIn 1.5s ease forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    h1 { color: #0056b3; margin-bottom: 30px; }
+    h2 {
+      color: #0056b3;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 10px;
+      margin-top: 25px;
+      text-align: left;
+    }
+    h3 { color: #333; margin-top: 15px; }
+    ul { list-style: none; padding: 0; }
+    li { margin-bottom: 10px; }
+    input[type="file"] {
+      padding: 10px;
+      font-size: 16px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin-left: 10px;
+      cursor: pointer;
+    }
+    #uploadMsg {
+      margin-top: 10px;
+      color: green;
+      font-weight: bold;
+    }
+    .month-section {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      margin-top: 20px;
+      text-align: left;
+    }
+    .category {
+      width: 32%;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>CS 檔案上傳</h1>
+
+    <!-- 年份選擇器 -->
+    <div id="yearSelector">
+      <label for="yearSelect"><strong>選擇年份：</strong></label>
+      <select id="yearSelect"></select>
+    </div>
+
+    <div id="fileSection"></div>
+
+    <!-- Upload Section -->
+    <div id="uploadSection">
+      <h2>檔案上傳</h2>
+      <input type="file" id="fileInput" />
+      <button id="uploadBtn">上傳</button>
+      <p id="uploadMsg"></p>
+    </div>
+
+    <!-- List Section -->
+    <div id="listSection">
+      <h2>已上傳檔案</h2>
+      <ul id="fileList"></ul>
+    </div>
+  </div>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js"></script>
+
+  <script>
+    // TODO: Replace with your Firebase project configuration
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT_ID.appspot.com",
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const storage = firebase.storage();
+
+    const months = ["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"];
+    
+    const formCategories = {
+      "CS01": [ { name: "表格一", icon: "📄" } ],
+      "CS02": [ { name: "表格二", icon: "📄" } ],
+      "CS03": [ { name: "表格三", icon: "📄" } ]
+    };
+
+    document.getElementById("uploadBtn").addEventListener("click", uploadFile);
+
+    populateYears();
+    renderFiles();
+    listFiles();
+
+    function populateYears() {
+      const yearSelect = document.getElementById("yearSelect");
+      yearSelect.innerHTML = "";
+      const currentYear = new Date().getFullYear();
+      for (let y = currentYear; y <= currentYear + 3; y++) {
+        const option = document.createElement("option");
+        option.value = y;
+        option.textContent = y;
+        yearSelect.appendChild(option);
+      }
+      yearSelect.value = currentYear;
+      yearSelect.addEventListener("change", renderFiles);
+    }
+
+    function renderFiles() {
+      const year = document.getElementById("yearSelect").value;
+      const section = document.getElementById("fileSection");
+      section.innerHTML = "";
+      const now = new Date();
+      const currentMonthIndex = now.getMonth();
+      const h2 = document.createElement("h2");
+      h2.textContent = `${months[currentMonthIndex]} ${year}`;
+      section.appendChild(h2);
+      const monthDiv = document.createElement("div");
+      monthDiv.className = "month-section";
+      Object.keys(formCategories).forEach(cs => {
+        const csDiv = document.createElement("div");
+        csDiv.className = "category";
+        const csTitle = document.createElement("h3");
+        csTitle.textContent = cs;
+        csDiv.appendChild(csTitle);
+        const csUl = document.createElement("ul");
+        formCategories[cs].forEach(form => {
+          const li = document.createElement("li");
+          li.textContent = `${form.icon} ${form.name}`;
+          csUl.appendChild(li);
+        });
+        csDiv.appendChild(csUl);
+        monthDiv.appendChild(csDiv);
+      });
+      section.appendChild(monthDiv);
+    }
+
+    function uploadFile() {
+      const fileInput = document.getElementById("fileInput");
+      if (fileInput.files.length === 0) {
+        document.getElementById("uploadMsg").textContent = "請選擇檔案再上傳。";
+        return;
+      }
+      const file = fileInput.files[0];
+      const storageRef = storage.ref("uploads/" + file.name);
+      const uploadTask = storageRef.put(file);
+
+      uploadTask.on("state_changed", 
+        (snapshot) => {
+          // progress
+        }, 
+        (error) => {
+          document.getElementById("uploadMsg").textContent = "上傳失敗：" + error.message;
+        }, 
+        () => {
+          document.getElementById("uploadMsg").textContent = "檔案已成功上傳！";
+          listFiles(); // refresh list after upload
+        }
+      );
+    }
+
+    function listFiles() {
+      const listRef = storage.ref("uploads/");
+      listRef.listAll().then((res) => {
+        const fileList = document.getElementById("fileList");
+        fileList.innerHTML = "";
+        res.items.forEach((itemRef) => {
+          itemRef.getDownloadURL().then((url) => {
+            const li = document.createElement("li");
+            li.innerHTML = `<a href="${url}" target="_blank">${itemRef.name}</a>`;
+            fileList.appendChild(li);
+          });
+        });
+      }).catch((error) => {
+        document.getElementById("uploadMsg").textContent = "無法列出檔案：" + error.message;
+      });
+    }
+  </script>
+</body>
+</html>

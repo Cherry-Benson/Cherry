@@ -40,7 +40,7 @@
     }
     h3 { color: #333; margin-top: 15px; }
     ul { list-style: none; padding: 0; }
-    li { margin-bottom: 10px; }
+    li { margin-bottom: 10px; text-align: left; }
     a { color: #007bff; text-decoration: none; }
     a:hover { text-decoration: underline; }
     input[type="password"] { padding: 10px; font-size: 16px; }
@@ -48,18 +48,14 @@
     #sessionMsg { color: red; font-weight: bold; margin-top: 20px; }
 
     .month-section {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
       margin-top: 20px;
       text-align: left;
     }
     .category {
-      width: 32%;   /* three per row */
       margin-bottom: 20px;
     }
     #logoutBtn {
-      position: fixed;   /* 固定在畫面 */
+      position: fixed;
       top: 15px;
       right: 15px;
       background-color: #d9534f;
@@ -69,7 +65,7 @@
       padding: 8px 16px;
       cursor: pointer;
       display: none;
-      z-index: 9999; /* 確保在最上層 */
+      z-index: 9999;
     }
     #logoutBtn:hover {
       background-color: #c9302c;
@@ -105,14 +101,21 @@
     const months = ["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"];
     
     const formCategories = {
-      "人事與行政": [
-        { name: "門市文具訂購申請表格", file: "門市文具訂購申請表格.pdf", icon: "👤" },
-      ],
       "市場部": [
-        { name: "video", file: "Video.zip", icon: "✔️" }
+        { name: "20240903_Memo_使用優惠券指引", file: "20240903_Memo_使用優惠券指引.pdf", icon: "📄" },
+        { name: "20241208_Memo_長者卡樂悠卡", file: "20241208_Memo_長者卡樂悠卡.pdf", icon: "📄" },
+        { name: "20250616_Memo_$50coupon(新加印版本)", file: "20250616_Memo_$50coupon(新加印版本).pdf", icon: "📄" },
+        { name: "20250922_Memo_The Point「會員全年尊尚禮遇」", file: "20250922_Memo_The Point「會員全年尊尚禮遇.pdf", icon: "📄" },
+        { name: "20251209_Memo_將中_健康生活賞", file: "20251209_Memo_將中_健康生活賞.pdf", icon: "📄" },
+        { name: "20251216_Memo_Olympian City S+ REWARDS_S Coupon", file: "20251216_Memo_Olympian City S+ REWARDS_S Coupon.pdf", icon: "📄" },
+        { name: "20251230_Memo_Olympian City_YRO2026", file: "20251230_Memo_Olympian City_YRO2026.pdf", icon: "📄" },
+        { name: "20260119_Memo_Olympian City_全年印花賞", file: "20260119_Memo_Olympian City_全年印花賞.pdf", icon: "📄" },
+        { name: "20260120_Memo_Olympian City_2026新春接財神", file: "20260120_Memo_Olympian City_2026新春接財神.pdf", icon: "📄" },
+        { name: "20260120_Memo_ThePoint_新春賞", file: "20260120_Memo_ThePoint_新春賞.pdf", icon: "📄" },
+        { name: "20260204_Memo_The Point新地商場x 內地支付寶 2026 消費獎賞活動", file: "20260204_Memo_The Point新地商場x 內地支付寶 2026 消費獎賞活動.pdf", icon: "📄" }
       ],
       "銷售與營運部": [
-      ]
+       { name: "POS操作速查表", file: "POS操作速查表.pdf", icon: "📄" },]
     };
 
     document.getElementById("submitBtn").addEventListener("click", checkPassword);
@@ -120,7 +123,7 @@
 
     function checkPassword() {
       const input = document.getElementById("passwordInput").value;
-      const correctPassword = "23306811"; // 修改此密碼字串
+      const correctPassword = "23306811";
       if (input === correctPassword) {
         document.getElementById("loginSection").style.display = "none";
         document.getElementById("yearSelector").style.display = "block";

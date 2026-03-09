@@ -4,102 +4,29 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>部門公告 - 僅供內部使用</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      background-color: #f4f4f4;
-      color: #333;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    .container {
-      max-width: 1000px;
-      width: 100%;
-      background: #fff;
-      padding: 30px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      text-align: center;
-      opacity: 0;
-      animation: fadeIn 1.5s ease forwards;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    h1 { color: #0056b3; margin-bottom: 30px; }
-    h2 {
-      color: #0056b3;
-      border-bottom: 2px solid #eee;
-      padding-bottom: 10px;
-      margin-top: 25px;
-      text-align: left;
-    }
-    h3 { color: #333; margin-top: 15px; }
-    ul { list-style: none; padding: 0; }
-    li { margin-bottom: 10px; text-align: left; }
-    a { color: #007bff; text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    input[type="password"] { padding: 10px; font-size: 16px; }
-    button { padding: 10px 20px; font-size: 16px; margin-left: 10px; cursor: pointer; }
-    #sessionMsg { color: red; font-weight: bold; margin-top: 20px; }
-
-    .month-section {
-      margin-top: 20px;
-      text-align: left;
-    }
-    .category {
-      margin-bottom: 20px;
-    }
-    #logoutBtn {
-      position: fixed;
-      top: 15px;
-      right: 15px;
-      background-color: #d9534f;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      padding: 8px 16px;
-      cursor: pointer;
-      display: none;
-      z-index: 9999;
-    }
-    #logoutBtn:hover {
-      background-color: #c9302c;
-    }
-  </style>
 </head>
-<body>
-  <div class="container">
-    <h1>部門公告 - 僅供內部使用</h1>
+<body style="margin:0; height:100vh; display:flex; justify-content:center; align-items:center;">
+
+  <div style="text-align:center;">
+    <h1 style="font-size:28px;">部門公告 - 僅供內部使用</h1>
 
     <!-- 登入區塊 -->
-    <div id="loginSection">
-      <h2 style="text-align:center;">請輸入密碼</h2>
-      <input type="password" id="passwordInput" placeholder="密碼" aria-label="Password Input"/>
-      <button id="submitBtn">提交</button>
+    <div id="loginSection" style="font-size:20px;">
+      <h2>請輸入密碼</h2>
+      <input type="password" id="passwordInput" placeholder="密碼" aria-label="Password Input" style="font-size:18px;"/>
+      <button id="submitBtn" style="font-size:18px;">提交</button>
       <p id="errorMsg" style="color:red;"></p>
     </div>
 
-    <!-- 年份選擇器 -->
-    <div id="yearSelector" style="display:none;">
-      <label for="yearSelect"><strong>選擇年份：</strong></label>
-      <select id="yearSelect"></select>
-    </div>
+    <!-- 公告區塊 -->
+    <div id="fileSection" style="margin-top:20px; display:none;"></div>
 
-    <div id="fileSection"></div>
-    <p id="sessionMsg"></p>
+    <!-- 登出按鈕 -->
+    <button id="logoutBtn" style="display:none; margin-top:20px; font-size:18px;">手動登出</button>
+    <p id="sessionMsg" style="font-size:18px;"></p>
   </div>
 
-  <!-- 固定在右上角的登出按鈕 -->
-  <button id="logoutBtn">手動登出</button>
-
   <script>
-    const months = ["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"];
-    
     const formCategories = {
       "市場部": [
         { name: "20240903_Memo_使用優惠券指引", file: "20240903_Memo_使用優惠券指引.pdf", icon: "📄" },
@@ -115,8 +42,14 @@
         { name: "20260204_Memo_The Point新地商場x 內地支付寶 2026 消費獎賞活動", file: "20260204_Memo_The Point新地商場x 內地支付寶 2026 消費獎賞活動.pdf", icon: "📄" }
       ],
       "銷售與營運部": [
-       { name: "POS操作速查表", file: "POS操作速查表.pdf", icon: "📄" },]
+        { name: "POS操作速查表", file: "POS操作速查表.pdf", icon: "📄" }
+      ],
+      "電腦部": [
+        { name: "更新正在進行中，稍後發布", file: "更新正在進行中.pdf", icon: "📄" },
+        ]
     };
+
+    let countdownInterval = null;
 
     document.getElementById("submitBtn").addEventListener("click", checkPassword);
     document.getElementById("logoutBtn").addEventListener("click", confirmLogout);
@@ -126,9 +59,8 @@
       const correctPassword = "23306811";
       if (input === correctPassword) {
         document.getElementById("loginSection").style.display = "none";
-        document.getElementById("yearSelector").style.display = "block";
+        document.getElementById("fileSection").style.display = "block";
         document.getElementById("logoutBtn").style.display = "inline-block";
-        populateYears();
         renderFiles();
         startLogoutTimer();
       } else {
@@ -136,80 +68,93 @@
       }
     }
 
-    function populateYears() {
-      const yearSelect = document.getElementById("yearSelect");
-      yearSelect.innerHTML = "";
-
-      const currentYear = new Date().getFullYear();
-      for (let y = currentYear; y <= currentYear + 3; y++) {
-        const option = document.createElement("option");
-        option.value = y;
-        option.textContent = y;
-        yearSelect.appendChild(option);
-      }
-
-      yearSelect.value = currentYear;
-      yearSelect.addEventListener("change", renderFiles);
-    }
-
     function renderFiles() {
-      const year = document.getElementById("yearSelect").value;
       const section = document.getElementById("fileSection");
       section.innerHTML = "";
 
-      const now = new Date();
-      const currentMonthIndex = now.getMonth();
+      const table = document.createElement("table");
+      table.setAttribute("border", "1");
+      table.setAttribute("cellpadding", "8");
+      table.setAttribute("style", "margin:auto;");
 
-      const h2 = document.createElement("h2");
-      h2.textContent = `${months[currentMonthIndex]} ${year}`;
-      section.appendChild(h2);
-
-      const monthDiv = document.createElement("div");
-      monthDiv.className = "month-section";
-
+      // Header row
+      const headerRow = document.createElement("tr");
       Object.keys(formCategories).forEach(dept => {
-        const deptDiv = document.createElement("div");
-        deptDiv.className = "category";
-        const deptTitle = document.createElement("h3");
-        deptTitle.textContent = dept;
-        deptDiv.appendChild(deptTitle);
-        const deptUl = document.createElement("ul");
-        formCategories[dept].forEach(form => {
-          const li = document.createElement("li");
-          li.innerHTML = `${form.icon} <a href="${form.file}" download>${form.name}</a>`;
-          deptUl.appendChild(li);
-        });
-        deptDiv.appendChild(deptUl);
-        monthDiv.appendChild(deptDiv);
+        const th = document.createElement("th");
+        th.textContent = dept;
+        headerRow.appendChild(th);
       });
+      table.appendChild(headerRow);
 
-      section.appendChild(monthDiv);
+      // Find max number of notices among all departments
+      const maxLength = Math.max(...Object.values(formCategories).map(arr => arr.length));
+
+      // Build rows so that first notices align
+      for (let i = 0; i < maxLength; i++) {
+        const row = document.createElement("tr");
+        Object.keys(formCategories).forEach(dept => {
+          const td = document.createElement("td");
+          td.setAttribute("style", "text-align:left;");
+          const sortedForms = formCategories[dept].slice().sort((a, b) => {
+            const dateA = parseInt(a.name.split("_")[0], 10) || 0;
+            const dateB = parseInt(b.name.split("_")[0], 10) || 0;
+            return dateB - dateA;
+          });
+          if (sortedForms[i]) {
+            td.innerHTML = `${sortedForms[i].icon} <a href="${sortedForms[i].file}" download>${sortedForms[i].name}</a>`;
+          }
+          row.appendChild(td);
+        });
+        table.appendChild(row);
+      }
+
+      section.appendChild(table);
     }
 
     function startLogoutTimer() {
+      if (countdownInterval) {
+        clearInterval(countdownInterval);
+      }
+      let remaining = 600; // 600 seconds = 10 minutes
+      updateCountdown(remaining);
+      countdownInterval = setInterval(() => {
+        remaining--;
+        updateCountdown(remaining);
+        if (remaining <= 0) {
+          clearInterval(countdownInterval);
+          logout(true);
+        }
+      }, 1000);
+    }
+
+    function updateCountdown(seconds) {
+      const minutes = Math.floor(seconds / 60);
+      const secs = seconds % 60;
       document.getElementById("sessionMsg").textContent =
-        "工作階段將於 10 分鐘後自動登出 或 點選右上角的「手動退出」按鈕退出。";
-      setTimeout(() => logout(true), 600 * 1000);
+        "工作階段剩餘時間: " + minutes + "分 " + (secs < 10 ? "0" : "") + secs + "秒";
     }
 
     function confirmLogout() {
       const confirmAction = confirm("確定要登出嗎？");
       if (confirmAction) {
-        logout(false); // 手動登出，不顯示訊息
+        logout(false);
       }
     }
 
     function logout(auto = true) {
+      if (countdownInterval) {
+        clearInterval(countdownInterval);
+        countdownInterval = null;
+      }
       document.getElementById("loginSection").style.display = "block";
-      document.getElementById("yearSelector").style.display = "none";
-      document.getElementById("fileSection").innerHTML = "";
+      document.getElementById("fileSection").style.display = "none";
       document.getElementById("passwordInput").value = "";
       document.getElementById("logoutBtn").style.display = "none";
       document.getElementById("sessionMsg").textContent = "";
       if (auto) {
         document.getElementById("errorMsg").textContent = "工作階段已到期，請重新登入。";
       } else {
-        document.getElementById("errorMsg").textContent = ""; // 手動登出不顯示訊息
+        document.getElementById("errorMsg").textContent = "";
       }
     }
   </script>

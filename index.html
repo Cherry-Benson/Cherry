@@ -42,11 +42,12 @@
         { name: "20260204_Memo_The Point新地商場x 內地支付寶 2026 消費獎賞活動", file: "20260204_Memo_The Point新地商場x 內地支付寶 2026 消費獎賞活動.pdf", icon: "📄" }
       ],
       "銷售與營運部": [
-        { name: "POS操作速查表", file: "POS操作速查表.pdf", icon: "📄" }
+        // 已移除 POS操作速查表
       ],
       "電腦部": [
-        { name: "網頁二維碼", file: "網頁二維碼.gif", icon: "📄" },
-        ]
+        { name: "POS操作速查表", file: "POS操作速查表.pdf", icon: "📄" },
+        { name: "網頁二維碼", file: "網頁二維碼.gif", icon: "📄" }
+      ]
     };
 
     let countdownInterval = null;
@@ -75,21 +76,28 @@
       const table = document.createElement("table");
       table.setAttribute("border", "1");
       table.setAttribute("cellpadding", "8");
-      table.setAttribute("style", "margin:auto;");
+      table.setAttribute("style", "margin:auto; border-collapse:collapse;");
 
-      // Header row
+      // Header row with colors + background shading
       const headerRow = document.createElement("tr");
       Object.keys(formCategories).forEach(dept => {
         const th = document.createElement("th");
         th.textContent = dept;
+        th.style.padding = "10px";
+        th.style.color =
+          dept === "市場部" ? "white" :
+          dept === "銷售與營運部" ? "white" :
+          dept === "電腦部" ? "white" : "black";
+        th.style.backgroundColor =
+          dept === "市場部" ? "darkred" :
+          dept === "銷售與營運部" ? "darkblue" :
+          dept === "電腦部" ? "darkgreen" : "gray";
         headerRow.appendChild(th);
       });
       table.appendChild(headerRow);
 
-      // Find max number of notices among all departments
+      // Build rows
       const maxLength = Math.max(...Object.values(formCategories).map(arr => arr.length));
-
-      // Build rows so that first notices align
       for (let i = 0; i < maxLength; i++) {
         const row = document.createElement("tr");
         Object.keys(formCategories).forEach(dept => {
@@ -159,4 +167,4 @@
     }
   </script>
 </body>
-</html>
+</html

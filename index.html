@@ -4,51 +4,76 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>部門公告 - 僅供內部使用</title>
+  <style>
+    body { margin:0; height:100vh; display:flex; justify-content:center; align-items:center; font-family: Arial, sans-serif; }
+    .container { text-align:center; width: 95%; max-width: 1100px; }
+    h1 { font-size:28px; margin-bottom:8px; }
+    #loginSection { font-size:20px; }
+    input[type="password"] { font-size:18px; padding:6px 8px; width:220px; }
+    button { font-size:18px; padding:6px 10px; cursor:pointer; }
+    table { margin:auto; border-collapse:collapse; width:100%; max-width:1080px; }
+    th, td { border:1px solid #ccc; padding:8px; vertical-align:top; min-width:160px; }
+    th { color:white; padding:10px; }
+    a { color: #0645AD; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    #sessionMsg { font-size:18px; margin-top:12px; }
+    #errorMsg { color:red; margin-top:8px; }
+    em.no-ann { color:#666; font-style:normal; }
+    @media (max-width:900px) {
+      table { font-size:14px; }
+      input[type="password"] { width:160px; }
+    }
+  </style>
 </head>
-<body style="margin:0; height:100vh; display:flex; justify-content:center; align-items:center;">
-
-  <div style="text-align:center;">
-    <h1 style="font-size:28px;">部門公告 - 僅供內部使用</h1>
+<body>
+  <div class="container">
+    <h1>部門公告 - 僅供內部使用</h1>
 
     <!-- 登入區塊 -->
-    <div id="loginSection" style="font-size:20px;">
+    <div id="loginSection">
       <h2>請輸入密碼</h2>
-      <input type="password" id="passwordInput" placeholder="密碼" aria-label="Password Input" style="font-size:18px;"/>
-      <button id="submitBtn" style="font-size:18px;">提交</button>
-      <p id="errorMsg" style="color:red;"></p>
+      <input type="password" id="passwordInput" placeholder="密碼" aria-label="Password Input" />
+      <button id="submitBtn">提交</button>
+      <p id="errorMsg"></p>
     </div>
 
     <!-- 公告區塊 -->
     <div id="fileSection" style="margin-top:20px; display:none;"></div>
 
     <!-- 登出按鈕 -->
-    <button id="logoutBtn" style="display:none; margin-top:20px; font-size:18px;">手動登出</button>
-    <p id="sessionMsg" style="font-size:18px;"></p>
+    <button id="logoutBtn" style="display:none; margin-top:20px;">手動登出</button>
+    <p id="sessionMsg"></p>
   </div>
 
   <script>
     const formCategories = {
       "市場部": [
-        { name: "20260428_Memo_西貢天后寶誕廟會", file: "20260428_Memo_西貢天后寶誕廟會.pdf", icon: "📄" },
-	{ name: "20260424_Memo_$50coupon(專門店版本)", file: "20260424_Memo_$50coupon(專門店版本).pdf", icon: "📄" },
-	{ name: "20260424_Memo_Cherry x 中原電器", file: "20260424_Memo_Cherry x 中原電器.pdf", icon: "📄" },
-	{ name: "20240903_Memo_使用優惠券指引", file: "20240903_Memo_使用優惠券指引.pdf", icon: "📄" },
-        { name: "20260402_Memo_HKTB_YRO26-27", file: "20260402_Memo_HKTB_YRO26-27.pdf", icon: "📄" },
-        { name: "20241208_Memo_長者卡樂悠卡", file: "20241208_Memo_長者卡樂悠卡.pdf", icon: "📄" },
-        { name: "20250616_Memo_$50coupon(新加印版本)", file: "20250616_Memo_$50coupon(新加印版本).pdf", icon: "📄" },
-        { name: "20250922_Memo_The Point「會員全年尊尚禮遇」", file: "20250922_Memo_The Point「會員全年尊尚禮遇」.pdf", icon: "📄" },
-        { name: "20251209_Memo_將中_健康生活賞", file: "20251209_Memo_將中_健康生活賞.pdf", icon: "📄" },
-        { name: "20251216_Memo_Olympian City S+ REWARDS_S Coupon", file: "20251216_Memo_Olympian City S+ REWARDS_S Coupon.pdf", icon: "📄" },
-        { name: "20251230_Memo_Olympian City_YRO2026", file: "20251230_Memo_Olympian City_YRO2026.pdf", icon: "📄" },
-        { name: "20260119_Memo_Olympian City_全年印花賞", file: "20260119_Memo_Olympian City_全年印花賞.pdf", icon: "📄" },
-        { name: "20260120_Memo_Olympian City_2026新春接財神", file: "20260120_Memo_Olympian City_2026新春接財神.pdf", icon: "📄" },
-        { name: "20260204_Memo_The Point新地商場x 內地支付寶 2026 消費獎賞活動", file: "20260204_Memo_The Point新地商場x 內地支付寶 2026 消費獎賞活動.pdf", icon: "📄" },
-        { name: "20260325_Memo_《Mikiki 2026 4月至5月 消費特刊》", file: "20260325_Memo_《Mikiki 2026 4月至5月 消費特刊》.pdf", icon: "📄" },
-        { name: "20260424_Memo_ThePoint_母親節", file: "20260424_Memo_ThePoint_母親節.pdf", icon: "📄" }
+        { name: "20260428_Memo_西貢天后寶誕廟會", file: "20260428_Memo_西貢天后寶誕廟會.pdf", icon: "📄", expiry: "2026-06-22" },
+        { name: "20260424_Memo_$50 Coupon(專門店版本)", file: "20260424_Memo_$50coupon(專門店版本).pdf", icon: "📄", expiry: "2026-12-31"},
+        { name: "20260424_Memo_Cherry x 中原電器", file: "20260424_Memo_Cherry x 中原電器.pdf", icon: "📄", expiry: "2026-07-01" },
+        { name: "20240903_Memo_使用優惠券指引", file: "20240903_Memo_使用優惠券指引.pdf", icon: "📄"},
+        { name: "20260402_Memo_HKTB_YRO26-27", file: "20260402_Memo_HKTB_YRO26-27.pdf", icon: "📄", expiry: "2027-04-01" },
+        { name: "20241208_Memo_長者卡樂悠卡", file: "20241208_Memo_長者卡樂悠卡.pdf", icon: "📄"},
+        { name: "20250616_Memo_$50 Coupon(新加印版本)", file: "20250616_Memo_$50coupon(新加印版本).pdf", icon: "📄"},
+        { name: "20250922_Memo_The Point「會員全年尊尚禮遇」", file: "20250922_Memo_The Point「會員全年尊尚禮遇」.pdf", icon: "📄", expiry: "2026-12-31" },
+        { name: "20251209_Memo_將中_健康生活賞", file: "20251209_Memo_將中_健康生活賞.pdf", icon: "📄", expiry: "2026-07-01" },
+        { name: "20251216_Memo_Olympian City S+ REWARDS_S Coupon", file: "20251216_Memo_Olympian City S+ REWARDS_S Coupon.pdf", icon: "📄"},
+        { name: "20251230_Memo_Olympian City_YRO2026", file: "20251230_Memo_Olympian City_YRO2026.pdf", icon: "📄", expiry: "2026-12-31" },
+        { name: "20260119_Memo_Olympian City_全年印花賞", file: "20260119_Memo_Olympian City_全年印花賞.pdf", icon: "📄", expiry: "2026-12-31" },
+        { name: "20260120_Memo_Olympian City_2026新春接財神", file: "20260120_Memo_Olympian City_2026新春接財神.pdf", icon: "📄", expiry: "2026-07-01" },
+        { name: "20260204_Memo_The Point新地商場x 內地支付寶 2026 消費獎賞活動", file: "20260204_Memo_The Point新地商場x 內地支付寶 2026 消費獎賞活動.pdf", icon: "📄", expiry: "2026-12-31" },
+        { name: "20260325_Memo_<Mikiki 2026 4月至5月 消費特刊>", file: "20260325_Memo_<Mikiki 2026 4月至5月 消費特刊>.pdf", icon: "📄", expiry: "2026-06-01" },
+        { name: "20260424_Memo_ThePoint_母親節", file: "20260424_Memo_ThePoint_母親節.pdf", icon: "📄", expiry: "2026-05-18" }
       ],
+
       "銷售與營運部": [
-        // 已移除 20260327 復活節 補貨通告
+        // intentionally empty to show "— 暫無公告 —" in first cell
       ],
+
+      "人力資源及行政部": [
+        // intentionally empty to show "— 暫無公告 —" in first cell
+      ],
+
       "電腦部": [
         { name: "POS操作速查表", file: "POS操作速查表.pdf", icon: "📄" },
         { name: "網頁二維碼", file: "網頁二維碼.gif", icon: "📄" }
@@ -59,10 +84,18 @@
 
     document.getElementById("submitBtn").addEventListener("click", checkPassword);
     document.getElementById("logoutBtn").addEventListener("click", confirmLogout);
+    document.getElementById("passwordInput").addEventListener("keydown", function(e) {
+      if (e.key === "Enter") checkPassword();
+    });
 
     function checkPassword() {
       const input = document.getElementById("passwordInput").value;
       const correctPassword = "23306811";
+      document.getElementById("errorMsg").textContent = "";
+      if (!input) {
+        document.getElementById("errorMsg").textContent = "請輸入密碼。";
+        return;
+      }
       if (input === correctPassword) {
         document.getElementById("loginSection").style.display = "none";
         document.getElementById("fileSection").style.display = "block";
@@ -81,21 +114,16 @@
       const table = document.createElement("table");
       table.setAttribute("border", "1");
       table.setAttribute("cellpadding", "8");
-      table.setAttribute("style", "margin:auto; border-collapse:collapse;");
 
-      // Header row with colors + background shading
+      // Header row
       const headerRow = document.createElement("tr");
       Object.keys(formCategories).forEach(dept => {
         const th = document.createElement("th");
         th.textContent = dept;
-        th.style.padding = "10px";
-        th.style.color =
-          dept === "市場部" ? "white" :
-          dept === "銷售與營運部" ? "white" :
-          dept === "電腦部" ? "white" : "black";
         th.style.backgroundColor =
           dept === "市場部" ? "darkred" :
           dept === "銷售與營運部" ? "darkblue" :
+          dept === "人力資源及行政部" ? "darkslategray" :
           dept === "電腦部" ? "darkgreen" : "gray";
         headerRow.appendChild(th);
       });
@@ -103,18 +131,36 @@
 
       // Build rows
       const maxLength = Math.max(...Object.values(formCategories).map(arr => arr.length));
-      for (let i = 0; i < maxLength; i++) {
+      // Ensure at least one row so empty departments can show "— 暫無公告 —"
+      const rowsCount = Math.max(1, maxLength);
+      for (let i = 0; i < rowsCount; i++) {
         const row = document.createElement("tr");
         Object.keys(formCategories).forEach(dept => {
           const td = document.createElement("td");
           td.setAttribute("style", "text-align:left;");
-          const sortedForms = formCategories[dept].slice().sort((a, b) => {
+
+          const today = new Date();
+          const validForms = formCategories[dept].filter(item => {
+            if (!item.expiry) return true;
+            const expiryDate = new Date(item.expiry + "T23:59:59");
+            return expiryDate >= today;
+          });
+
+          const sortedForms = validForms.slice().sort((a, b) => {
             const dateA = parseInt(a.name.split("_")[0], 10) || 0;
             const dateB = parseInt(b.name.split("_")[0], 10) || 0;
             return dateB - dateA;
           });
+
           if (sortedForms[i]) {
-            td.innerHTML = `${sortedForms[i].icon} <a href="${sortedForms[i].file}" download>${sortedForms[i].name}</a>`;
+            td.innerHTML = `${sortedForms[i].icon} <a href="${encodeURI(sortedForms[i].file)}" download>${escapeHtml(sortedForms[i].name)}</a>`;
+          } else {
+            // If this is the first cell (i === 0) and there are no items, show "— 暫無公告 —"
+            if (i === 0) {
+              td.innerHTML = `<em class="no-ann">— 暫無公告 —</em>`;
+            } else {
+              td.innerHTML = "";
+            }
           }
           row.appendChild(td);
         });
@@ -125,10 +171,8 @@
     }
 
     function startLogoutTimer() {
-      if (countdownInterval) {
-        clearInterval(countdownInterval);
-      }
-      let remaining = 600; // 600 seconds = 10 minutes
+      if (countdownInterval) clearInterval(countdownInterval);
+      let remaining = 600; // 10 minutes in seconds
       updateCountdown(remaining);
       countdownInterval = setInterval(() => {
         remaining--;
@@ -148,10 +192,7 @@
     }
 
     function confirmLogout() {
-      const confirmAction = confirm("確定要登出嗎？");
-      if (confirmAction) {
-        logout(false);
-      }
+      if (confirm("確定要登出嗎？")) logout(false);
     }
 
     function logout(auto = true) {
@@ -164,12 +205,18 @@
       document.getElementById("passwordInput").value = "";
       document.getElementById("logoutBtn").style.display = "none";
       document.getElementById("sessionMsg").textContent = "";
-      if (auto) {
-        document.getElementById("errorMsg").textContent = "工作階段已到期，請重新登入。";
-      } else {
-        document.getElementById("errorMsg").textContent = "";
-      }
+      document.getElementById("errorMsg").textContent = auto ? "工作階段已到期，請重新登入。" : "";
+    }
+
+    // Utility: escape HTML to avoid injection in names
+    function escapeHtml(text) {
+      return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
     }
   </script>
 </body>
-</html
+</html>

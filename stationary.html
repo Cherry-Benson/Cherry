@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Stationery Request</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <h2>Office Stationery Request</h2>
+  <form id="requestForm">
+    Item: <input type="text" id="item"><br>
+    Quantity: <input type="number" id="quantity"><br>
+    <button type="submit">Generate PDF</button>
+  </form>
+
+  <script>
+    document.getElementById("requestForm").addEventListener("submit", function(e){
+      e.preventDefault();
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      doc.text(`Item: ${document.getElementById("item").value}`, 10, 10);
+      doc.text(`Quantity: ${document.getElementById("quantity").value}`, 10, 20);
+      doc.save("stationery_request.pdf");
+    });
+  </script>
+</body>
+</html>

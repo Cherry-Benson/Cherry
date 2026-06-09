@@ -5,53 +5,43 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>部門公告 - 僅供內部使用</title>
   <style>
-    body { margin:0; height:100vh; display:flex; justify-content:center; align-items:center; font-family: Arial, sans-serif; }
-    .container { text-align:center; width: 95%; max-width: 1100px; }
-    h1 { font-size:28px; margin-bottom:8px; }
-    #loginSection { font-size:20px; }
-    input[type="password"] { font-size:18px; padding:6px 8px; width:220px; }
-    button { font-size:18px; padding:6px 10px; cursor:pointer; }
-    table { margin:auto; border-collapse:collapse; width:100%; max-width:1080px; }
-    th, td { border:1px solid #ccc; padding:8px; vertical-align:top; min-width:160px; }
-    th { color:white; padding:10px; }
+    body { 
+      margin: 0; 
+      min-height: 100vh; 
+      display: flex; 
+      flex-direction: column;
+      justify-content: center; 
+      align-items: center; 
+      font-family: Arial, sans-serif; 
+      padding: 20px 0;
+      box-sizing: border-box;
+    }
+    .container { text-align: center; width: 95%; max-width: 1100px; }
+    h1 { font-size: 28px; margin-bottom: 8px; }
+    #loginSection { font-size: 20px; }
+    input[type="password"] { font-size: 18px; padding: 6px 8px; width: 220px; }
+    button { font-size: 18px; padding: 6px 10px; cursor: pointer; }
+    
+    /* Table & Responsive Styles */
+    .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin: auto;
+    }
+    table { border-collapse: collapse; width: 100%; max-width: 1080px; margin: auto; }
+    th, td { border: 1px solid #ccc; padding: 8px; vertical-align: top; min-width: 160px; }
+    th { color: white; padding: 10px; }
     a { color: #0645AD; text-decoration: none; }
     a:hover { text-decoration: underline; }
-    #sessionMsg { font-size:18px; margin-top:12px; }
-    #errorMsg { color:red; margin-top:8px; }
-    em.no-ann { color:#666; font-style:normal; }
     
-    /* 影片撥放器燈箱樣式 / Video Player Overlay Styles */
-    #videoOverlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.9);
-      z-index: 1000;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-    }
-    #videoOverlay video {
-      max-width: 90%;
-      max-height: 80%;
-      box-shadow: 0 0 20px rgba(255,255,255,0.2);
-    }
-    #closeVideoBtn {
-      margin-top: 15px;
-      padding: 8px 16px;
-      background: #fff;
-      border: none;
-      border-radius: 4px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
+    #sessionMsg { font-size: 18px; margin-top: 12px; }
+    #errorMsg { color: red; margin-top: 8px; }
+    em.no-ann { color: #666; font-style: normal; }
+    
     @media (max-width:900px) {
-      table { font-size:14px; }
-      input[type="password"] { width:160px; }
+      table { font-size: 14px; }
+      input[type="password"] { width: 160px; }
     }
   </style>
 </head>
@@ -72,15 +62,10 @@
     <p id="sessionMsg"></p>
   </div>
 
-  <div id="videoOverlay">
-    <video id="inlinePlayer" controls autoplay></video>
-    <button id="closeVideoBtn">返回主選單</button>
-  </div>
-
   <script>
     const formCategories = {
       "市場部":[
-	{ name: "20260512_Memo_西貢天后寶誕廟會(東港城Ver)", file: "20260512_Memo_西貢天后寶誕廟會(東港城Ver).pdf", icon: "📄", expiry: "2026-06-21"},
+        { name: "20260512_Memo_西貢天后寶誕廟會(東港城Ver)", file: "20260512_Memo_西貢天后寶誕廟會(東港城Ver).pdf", icon: "📄", expiry: "2026-06-21"},
         { name: "20260428_Memo_西貢天后寶誕廟會", file: "20260428_Memo_西貢天后寶誕廟會.pdf", icon: "📄", expiry: "2026-06-21" },
         { name: "20260424_Memo_$50 Coupon(專門店版本)", file: "20260424_Memo_$50coupon(專門店版本).pdf", icon: "📄", expiry: "2026-12-31"},
         { name: "20260424_Memo_Cherry x 中原電器", file: "20260424_Memo_Cherry x 中原電器.pdf", icon: "📄", expiry: "2026-07-01" },
@@ -95,25 +80,21 @@
         { name: "20260119_Memo_Olympian City_全年印花賞", file: "20260119_Memo_Olympian City_全年印花賞.pdf", icon: "📄", expiry: "2026-12-31" },
         { name: "20260120_Memo_Olympian City_2026新春接財神", file: "20260120_Memo_Olympian City_2026新春接財神.pdf", icon: "📄", expiry: "2026-07-01" },
         { name: "20260204_Memo_The Point新地商場x 內地支付寶 2026 消費獎賞活動", file: "20260204_Memo_The Point新地商場x 內地支付寶 2026 消費獎賞活動.pdf", icon: "📄", expiry: "2026-12-31" },
-        { name: "20260520_Memo_ThePoint_父親節", file: "20260521_Memo_ThePoint_父親節(Revised).pdf", icon: "📄", expiry: "2026-06-23"},
-	{ name: "20260527_Memo_奧海城 Goal Together (世界杯)", file: "20260527_Memo_奧海城 Goal Together (世界杯).pdf", icon: "📄", expiry: "2026-10-01"},
-	{ name: "20260514_Memo_恒基兆業地產成員尊享優惠", file: "20260514_Memo_恒基兆業地產成員尊享優惠.pdf", icon: "📄", expiry: "2026-12-31"},
-	{ name: "20260514_Memo_恒基兆業地產成員尊享優惠-HLD PMD Staff Card Samples", file: "20260514_Memo_恒基兆業地產成員尊享優惠-HLD PMD Staff Card Samples.pdf", icon: "📄", expiry: "2026-12-31"},
-        { name: "20260508_Memo_將軍澳中心電子現金劵", file: "20260508_Memo_將軍澳中心電子現金劵.pdf", icon: "📄",}
-    ],
-
-       "銷售與營運部": [
-        // intentionally empty to show "— 暫無公告 —"
+        { name: "20260520_Memo_ThePoint_父親節", file: "20260520_Memo_ThePoint_父親節.pdf", icon: "📄", expiry: "2026-06-23"},
+        { name: "20260608_Memo_東港城_7.1慶回歸激賞", file: "20260608_Memo_東港城_7.1慶回歸激賞.pdf", icon: "📄", expiry: "2026-08-01"},
+        { name: "20260527_Memo_奧海城 Goal Together (世界杯)", file: "20260527_Memo_奧海城 Goal Together (世界杯).pdf", icon: "📄", expiry: "2026-10-01"},
+        { name: "20260514_Memo_恒基兆業地產成員尊享優惠", file: "20260514_Memo_恒基兆業地產成員尊享優惠.pdf", icon: "📄", expiry: "2026-12-31"},
+        { name: "20260514_Memo_恒基兆業地產成員尊享優惠-HLD PMD Staff Card Samples", file: "20260514_Memo_恒基兆業地產成員尊享優惠-HLD PMD Staff Card Samples.pdf", icon: "📄", expiry: "2026-12-31"},
+        { name: "20260508_Memo_將軍澳中心電子現金劵", file: "20260508_Memo_將軍澳中心電子現金劵.pdf", icon: "📄"}
       ],
 
-      "人力資源及行政部": [
-        { name: "如何蒞臨Cherry Office", file: "lead the way.mp4", icon: "📹" }
-      ],
+      "銷售與營運部": [],
+      "人力資源及行政部": [],
 
       "電腦部": [
         { name: "POS操作速查表", file: "POS操作速查表.pdf", icon: "📄" },
         { name: "網頁二維碼", file: "網頁二維碼.gif", icon: "📄" },
-	{ name: "PE條碼列表", file: "PE條碼列表.pdf", icon: "📄" }
+        { name: "PE條碼列表", file: "PE條碼列表.pdf", icon: "📄" }
       ]
     };
 
@@ -124,27 +105,6 @@
     document.getElementById("passwordInput").addEventListener("keydown", function(e) {
       if (e.key === "Enter") checkPassword();
     });
-
-    // 影片播放控制事件監聽 / Video Controls Event Listeners
-    const videoOverlay = document.getElementById("videoOverlay");
-    const inlinePlayer = document.getElementById("inlinePlayer");
-    const closeVideoBtn = document.getElementById("closeVideoBtn");
-
-    // 影片播放完畢時，自動關閉並回到選單 / Auto-return when video ends
-    inlinePlayer.addEventListener("ended", closeVideoPlayer);
-    closeVideoBtn.addEventListener("click", closeVideoPlayer);
-
-    function playVideo(fileUrl) {
-      inlinePlayer.src = fileUrl;
-      videoOverlay.style.display = "flex";
-      inlinePlayer.play();
-    }
-
-    function closeVideoPlayer() {
-      inlinePlayer.pause();
-      inlinePlayer.src = ""; // Clear source to stop downloading network traffic
-      videoOverlay.style.display = "none";
-    }
 
     function checkPassword() {
       const input = document.getElementById("passwordInput").value;
@@ -173,9 +133,31 @@
       table.setAttribute("border", "1");
       table.setAttribute("cellpadding", "8");
 
-      // Header row
+      const departments = Object.keys(formCategories);
+
+      // 1. Pre-process and filter valid, sorted announcements for each department
+      const processedCategories = {};
+      const today = new Date();
+
+      departments.forEach(dept => {
+        // Filter out expired items
+        const validForms = formCategories[dept].filter(item => {
+          if (!item.expiry) return true;
+          const expiryDate = new Date(item.expiry + "T23:59:59");
+          return expiryDate >= today;
+        });
+
+        // Sort items by date prefix in descending order
+        processedCategories[dept] = validForms.sort((a, b) => {
+          const dateA = parseInt(a.name.split("_")[0], 10) || 0;
+          const dateB = parseInt(b.name.split("_")[0], 10) || 0;
+          return dateB - dateA;
+        });
+      });
+
+      // 2. Render Header row
       const headerRow = document.createElement("tr");
-      Object.keys(formCategories).forEach(dept => {
+      departments.forEach(dept => {
         const th = document.createElement("th");
         th.textContent = dept;
         th.style.backgroundColor =
@@ -187,40 +169,23 @@
       });
       table.appendChild(headerRow);
 
-      // Build rows
-      const maxLength = Math.max(...Object.values(formCategories).map(arr => arr.length));
-      const rowsCount = Math.max(1, maxLength);
+      // 3. Find maximum length based ONLY on active items
+      const maxLength = Math.max(...Object.values(processedCategories).map(arr => arr.length));
+      const rowsCount = Math.max(1, maxLength); // Minimum 1 row to show empty messages
+
+      // 4. Build compressed table rows
       for (let i = 0; i < rowsCount; i++) {
         const row = document.createElement("tr");
-        Object.keys(formCategories).forEach(dept => {
+        departments.forEach(dept => {
           const td = document.createElement("td");
           td.setAttribute("style", "text-align:left;");
 
-          const today = new Date();
-          const validForms = formCategories[dept].filter(item => {
-            if (!item.expiry) return true;
-            const expiryDate = new Date(item.expiry + "T23:59:59");
-            return expiryDate >= today;
-          });
+          const deptForms = processedCategories[dept];
 
-          const sortedForms = validForms.slice().sort((a, b) => {
-            const dateA = parseInt(a.name.split("_")[0], 10) || 0;
-            const dateB = parseInt(b.name.split("_")[0], 10) || 0;
-            return dateB - dateA;
-          });
-
-          if (sortedForms[i]) {
-            const fileItem = sortedForms[i];
-            const escapedName = escapeHtml(fileItem.name);
-            const encodedFile = encodeURI(fileItem.file);
-            
-            // 判斷是否為 MP4 影片 / Check if it is an MP4 video
-            if (fileItem.file.toLowerCase().endsWith('.mp4')) {
-              td.innerHTML = `${fileItem.icon} <a href="#" class="video-link" data-src="${encodedFile}">${escapedName}</a>`;
-            } else {
-              td.innerHTML = `${fileItem.icon} <a href="${encodedFile}" download>${escapedName}</a>`;
-            }
+          if (deptForms[i]) {
+            td.innerHTML = `${deptForms[i].icon} <a href="${encodeURI(deptForms[i].file)}" download>${escapeHtml(deptForms[i].name)}</a>`;
           } else {
+            // Only show empty prompt in the very first row if the list is completely blank
             if (i === 0) {
               td.innerHTML = `<em class="no-ann">— 暫無公告 —</em>`;
             } else {
@@ -232,21 +197,17 @@
         table.appendChild(row);
       }
 
-      // 為所有影片連結綁定點擊事件 / Bind click events to all video links
-      table.querySelectorAll('.video-link').forEach(link => {
-        link.addEventListener('click', function(e) {
-          e.preventDefault();
-          const videoSrc = this.getAttribute('data-src');
-          playVideo(videoSrc);
-        });
-      });
+      // Responsive display wrapper
+      const wrapper = document.createElement("div");
+      wrapper.className = "table-responsive";
+      wrapper.appendChild(table);
 
-      section.appendChild(table);
+      section.appendChild(wrapper);
     }
 
     function startLogoutTimer() {
       if (countdownInterval) clearInterval(countdownInterval);
-      let remaining = 600; // 10 minutes in seconds
+      let remaining = 600; 
       updateCountdown(remaining);
       countdownInterval = setInterval(() => {
         remaining--;
@@ -274,7 +235,6 @@
         clearInterval(countdownInterval);
         countdownInterval = null;
       }
-      closeVideoPlayer(); // Ensure video closes if session auto-expires while playing
       document.getElementById("loginSection").style.display = "block";
       document.getElementById("fileSection").style.display = "none";
       document.getElementById("passwordInput").value = "";

@@ -93,6 +93,7 @@
       "人力資源及行政部": [
         { name: "如何蒞臨Cherry Office", file: "lead the way.mp4", icon: "📹" }
       ],
+
       "電腦部": [
         { name: "POS操作速查表", file: "POS操作速查表.pdf", icon: "📄" },
         { name: "網頁二維碼", file: "網頁二維碼.gif", icon: "📄" },
@@ -185,7 +186,16 @@
           const deptForms = processedCategories[dept];
 
           if (deptForms[i]) {
-            td.innerHTML = `${deptForms[i].icon} <a href="${encodeURI(deptForms[i].file)}" download>${escapeHtml(deptForms[i].name)}</a>`;
+            const fileUrl = encodeURI(deptForms[i].file);
+            const fileName = escapeHtml(deptForms[i].name);
+            const isVideo = deptForms[i].file.toLowerCase().endsWith('.mp4');
+
+            // Explicit change here: Only remove download attribute for .mp4 files
+            if (isVideo) {
+              td.innerHTML = `${deptForms[i].icon} <a href="${fileUrl}" target="_blank">${fileName}</a>`;
+            } else {
+              td.innerHTML = `${deptForms[i].icon} <a href="${fileUrl}" download>${fileName}</a>`;
+            }
           } else {
             // Only show empty prompt in the very first row if the list is completely blank
             if (i === 0) {

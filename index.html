@@ -39,6 +39,41 @@
     #errorMsg { color: red; margin-top: 8px; }
     em.no-ann { color: #666; font-style: normal; }
     
+    /* Video Modal Overlay Styles */
+    .video-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.95);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+    .video-overlay video {
+      width: 90%;
+      max-width: 960px;
+      max-height: 70vh;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+      background-color: #000;
+    }
+    .video-close-btn {
+      margin-top: 20px;
+      font-size: 18px;
+      padding: 10px 24px;
+      background-color: #fff;
+      color: #333;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.2s;
+    }
+    .video-close-btn:hover {
+      background-color: #ddd;
+    }
+    
     @media (max-width:900px) {
       table { font-size: 14px; }
       input[type="password"] { width: 160px; }
@@ -60,6 +95,11 @@
 
     <button id="logoutBtn" style="display:none; margin-top:20px;">手動登出</button>
     <p id="sessionMsg"></p>
+  </div>
+
+  <div id="videoModal" class="video-overlay" style="display: none;">
+    <video id="modalVideo" controls></video>
+    <button id="closeVideoBtn" class="video-close-btn">返回主畫面</button>
   </div>
 
   <script>
@@ -105,6 +145,7 @@
 
     document.getElementById("submitBtn").addEventListener("click", checkPassword);
     document.getElementById("logoutBtn").addEventListener("click", confirmLogout);
+    document.getElementById("closeVideoBtn").addEventListener("click", closeVideo);
     document.getElementById("passwordInput").addEventListener("keydown", function(e) {
       if (e.key === "Enter") checkPassword();
     });
@@ -190,9 +231,9 @@
             const fileName = escapeHtml(deptForms[i].name);
             const isVideo = deptForms[i].file.toLowerCase().endsWith('.mp4');
 
-            // Explicit change here: Only remove download attribute for .mp4 files
+            // Play .mp4 internally without changing pages, download or target new windows for other assets
             if (isVideo) {
-              td.innerHTML = `${deptForms[i].icon} <a href="${fileUrl}" target="_blank">${fileName}</a>`;
+              td.innerHTML = `${deptForms[i].icon} <a href="#" onclick="playVideo('${fileUrl}'); return false;">${fileName}</a>`;
             } else {
               td.innerHTML = `${deptForms[i].icon} <a href="${fileUrl}" download>${fileName}</a>`;
             }
@@ -215,6 +256,30 @@
       wrapper.appendChild(table);
 
       section.appendChild(wrapper);
+    }
+
+    // Modal control handlers
+    function playVideo(url) {
+      const modal = document.getElementById("videoModal");
+      const video = document.getElementById("modalVideo");
+      
+      video.src = url;
+      modal.style.display = "flex";
+      video.play();
+
+      // Automatically exit and return to board when movie completes playing
+      video.onended = function() {
+        closeVideo();
+      };
+    }
+
+    function closeVideo() {
+      const modal = document.getElementById("videoModal");
+      const video = document.getElementById("modalVideo");
+      
+      video.pause();
+      video.src = ""; // Flush source data stream
+      modal.style.display = "none";
     }
 
     function startLogoutTimer() {
@@ -247,6 +312,7 @@
         clearInterval(countdownInterval);
         countdownInterval = null;
       }
+      closeVideo(); // Reset video player context if open during automatic session timeout
       document.getElementById("loginSection").style.display = "block";
       document.getElementById("fileSection").style.display = "none";
       document.getElementById("passwordInput").value = "";

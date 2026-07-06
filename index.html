@@ -12,32 +12,112 @@
       flex-direction: column;
       justify-content: center; 
       align-items: center; 
-      font-family: Arial, sans-serif; 
-      padding: 20px 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; 
+      padding: 40px 20px;
+      box-sizing: border-box;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+    .container { 
+      text-align: center; 
+      width: 100%; 
+      max-width: 1100px; 
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    h1 { font-size: 28px; margin-bottom: 24px; color: #111; }
+    h2 { font-size: 20px; margin-bottom: 16px; color: #444; }
+    #loginSection { 
+      font-size: 20px; 
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .input-group {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    input[type="password"] { 
+      font-size: 16px; 
+      padding: 8px 12px; 
+      width: 220px; 
+      border: 1px solid #ccc;
+      border-radius: 4px;
       box-sizing: border-box;
     }
-    .container { text-align: center; width: 95%; max-width: 1100px; }
-    h1 { font-size: 28px; margin-bottom: 8px; }
-    #loginSection { font-size: 20px; }
-    input[type="password"] { font-size: 18px; padding: 6px 8px; width: 220px; }
-    button { font-size: 18px; padding: 6px 10px; cursor: pointer; }
+    button { 
+      font-size: 16px; 
+      padding: 8px 16px; 
+      cursor: pointer; 
+      background-color: #0056b3;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+    button:hover {
+      background-color: #004085;
+    }
+    
+    /* QR Code Container Styling */
+    .qr-container {
+      margin-top: 35px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .qr-text {
+      font-size: 12px; /* Made slightly smaller for a cleaner look */
+      color: #666;
+      margin-bottom: 12px;
+    }
+    .qr-image {
+      width: 180px;
+      height: 180px;
+      border: 1px solid #e0e0e0;
+      padding: 8px;
+      background: #fff;
+      border-radius: 4px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
     
     /* Table & Responsive Styles */
+    #fileSection {
+      width: 100%;
+    }
     .table-responsive {
       width: 100%;
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
-      margin: auto;
+      margin: 20px auto;
+      background: #fff;
+      border-radius: 4px;
+      box-shadow: 0 2px 12 rgba(0,0,0,0.08);
     }
     table { border-collapse: collapse; width: 100%; max-width: 1080px; margin: auto; }
-    th, td { border: 1px solid #ccc; padding: 8px; vertical-align: top; min-width: 160px; }
-    th { color: white; padding: 10px; }
-    a { color: #0645AD; text-decoration: none; }
+    th, td { border: 1px solid #eee; padding: 12px; vertical-align: middle; min-width: 160px; }
+    th { color: white; padding: 14px 12px; font-weight: 600; text-align: center; }
+    td { text-align: left; }
+    a { color: #0056b3; text-decoration: none; font-weight: 500; }
     a:hover { text-decoration: underline; }
     
-    #sessionMsg { font-size: 18px; margin-top: 12px; }
-    #errorMsg { color: red; margin-top: 8px; }
-    em.no-ann { color: #666; font-style: normal; }
+    #logoutBtn {
+      background-color: #6c757d;
+    }
+    #logoutBtn:hover {
+      background-color: #5a6268;
+    }
+    #sessionMsg { font-size: 15px; color: #666; margin-top: 16px; }
+    #errorMsg { color: #dc3545; font-size: 14px; margin-top: 8px; min-height: 20px; }
+    em.no-ann { color: #999; font-style: normal; display: block; text-align: center; width: 100%; }
     
     /* Video Modal Overlay Styles */
     .video-overlay {
@@ -60,7 +140,7 @@
     }
     .video-close-btn {
       margin-top: 20px;
-      font-size: 18px;
+      font-size: 16px;
       padding: 10px 24px;
       background-color: #fff;
       color: #333;
@@ -76,7 +156,9 @@
     
     @media (max-width:900px) {
       table { font-size: 14px; }
+      th, td { padding: 10px 8px; }
       input[type="password"] { width: 160px; }
+      body { padding: 20px 10px; }
     }
   </style>
 </head>
@@ -86,12 +168,19 @@
 
     <div id="loginSection">
       <h2>請輸入密碼</h2>
-      <input type="password" id="passwordInput" placeholder="密碼" aria-label="Password Input" />
-      <button id="submitBtn">提交</button>
+      <div class="input-group">
+        <input type="password" id="passwordInput" placeholder="密碼" aria-label="Password Input" />
+        <button id="submitBtn">提交</button>
+      </div>
       <p id="errorMsg"></p>
+      
+      <div class="qr-container">
+        <div class="qr-text">您亦可掃描下方行動條碼造訪網站</div>
+        <img class="qr-image" src="網頁二維碼.gif" alt="網頁二維碼" />
+      </div>
     </div>
 
-    <div id="fileSection" style="margin-top:20px; display:none;"></div>
+    <div id="fileSection" style="display:none;"></div>
 
     <button id="logoutBtn" style="display:none; margin-top:20px;">手動登出</button>
     <p id="sessionMsg"></p>
@@ -107,10 +196,10 @@
       "市場部":[
         { name: "20260629_Memo_香港開心購物節", file: "20260629_Memo_香港開心購物節.pdf", icon: "📄", expiry: "2026-09-01"},
         { name: "專門店Promotion_20260630", file: "專門店Promotion_20260630.pdf", icon: "📄"},
-		{ name: "20260630_Memo_東港城_潮玩夏日祭", file: "20260630_Memo_東港城_潮玩夏日祭.pdf", icon: "📄", expiry: "2026-10-01"},
-		{ name: "20260630_Summer Chill樂在當夏_Memo", file: "20260630_Summer Chill樂在當夏_Memo_.pdf", icon: "📄", expiry: "2026-09-01"},
-		{ name: "20260625_香港仔夏季推廣活動_Memo", file: "20260625_香港仔夏季推廣活動_Memo.pdf", icon: "📄", expiry: "2026-09-01"},
-		{ name: "20260424_Memo_$50 Coupon(專門店版本)", file: "20260424_Memo_$50coupon(專門店版本).pdf", icon: "📄", expiry: "2026-12-31"},
+        { name: "20260630_Memo_東港城_潮玩夏日祭", file: "20260630_Memo_東港城_潮玩夏日祭.pdf", icon: "📄", expiry: "2026-10-01"},
+        { name: "20260630_Summer Chill樂在當夏_Memo", file: "20260630_Summer Chill樂在當夏_Memo_.pdf", icon: "📄", expiry: "2026-09-01"},
+        { name: "20260625_香港仔夏季推廣活動_Memo", file: "20260625_香港仔夏季推廣活動_Memo.pdf", icon: "📄", expiry: "2026-09-01"},
+        { name: "20260424_Memo_$50 Coupon(專門店版本)", file: "20260424_Memo_$50coupon(專門店版本).pdf", icon: "📄", expiry: "2026-12-31"},
         { name: "20260618_Memo_Cherry x 中原電器", file: "20260618_Memo_Cherry x 中原電器.pdf", icon: "📄", expiry: "2026-08-30" },
         { name: "20240903_Memo_使用優惠券指引", file: "20240903_Memo_使用優惠券指引.pdf", icon: "📄"},
         { name: "20260402_Memo_HKTB_YRO26-27", file: "20260402_Memo_HKTB_YRO26-27.pdf", icon: "📄", expiry: "2027-04-01" },
@@ -118,11 +207,9 @@
         { name: "20260615_Memo_Olympian City S+ REWARDS_S Dollar", file: "20260615_Memo_Olympian City S+ REWARDS_S Dollar.pdf", icon: "📄"},
         { name: "20250616_Memo_$50 Coupon(新加印版本)", file: "20250616_Memo_$50coupon(新加印版本).pdf", icon: "📄"},
         { name: "20250922_Memo_The Point「會員全年尊尚禮遇」", file: "20250922_Memo_The Point「會員全年尊尚禮遇」.pdf", icon: "📄", expiry: "2026-12-31" },
-        { name: "20251209_Memo_將中_健康生活賞", file: "20251209_Memo_將中_健康生活賞.pdf", icon: "📄", expiry: "2026-07-01" },
         { name: "20251216_Memo_Olympian City S+ REWARDS_S Coupon", file: "20251216_Memo_Olympian City S+ REWARDS_S Coupon.pdf", icon: "📄"},
         { name: "20251230_Memo_Olympian City_YRO2026", file: "20251230_Memo_Olympian City_YRO2026.pdf", icon: "📄", expiry: "2026-12-31" },
         { name: "20260119_Memo_Olympian City_全年印花賞", file: "20260119_Memo_Olympian City_全年印花賞.pdf", icon: "📄", expiry: "2026-12-31" },
-        { name: "20260120_Memo_Olympian City_2026新春接財神", file: "20260120_Memo_Olympian City_2026新春接財神.pdf", icon: "📄", expiry: "2026-07-01" },
         { name: "20260204_Memo_The Point新地商場x內地支付寶2026消費獎賞活動", file: "20260204_Memo_The Point新地商場x 內地支付寶 2026 消費獎賞活動.pdf", icon: "📄", expiry: "2026-12-31" },
         { name: "20260618_Memo_HKTB_Summer Fun", file: "20260618_Memo_HKTB_Summer Fun.pdf", icon: "📄", expiry: "2026-09-01"},
         { name: "20260610_Memo_東港城_7.1慶回歸激賞", file: "20260610_Memo_東港城_7.1慶回歸激賞.pdf", icon: "📄", expiry: "2026-08-01"},
@@ -131,6 +218,7 @@
         { name: "20260514_Memo_恒基兆業地產成員- HLD PMD Staff Card Samples", file: "20260514_Memo_恒基兆業地產成員尊享優惠-HLD PMD Staff Card Samples.pdf", icon: "📄", expiry: "2026-12-31"},
         { name: "20260508_Memo_將軍澳中心電子現金劵", file: "20260508_Memo_將軍澳中心電子現金劵.pdf", icon: "📄"}
       ],
+
       "銷售與營運部": [],
       "人力資源及行政部": [
         { name: "如何蒞臨 Office", file: "lead the way.mp4", icon: "📹" }
@@ -138,7 +226,7 @@
 
       "電腦部": [
         { name: "POS操作速查表", file: "POS操作速查表.pdf", icon: "📄" },
-        { name: "網頁二維碼", file: "網頁二維碼.gif", icon: "📄" },
+        /* 網頁二維碼已從此處清單移除，改到登入畫面展示 */
         { name: "PE條碼列表", file: "PE條碼列表.pdf", icon: "📄" }
       ]
     };
@@ -176,8 +264,6 @@
       section.innerHTML = "";
 
       const table = document.createElement("table");
-      table.setAttribute("border", "1");
-      table.setAttribute("cellpadding", "8");
 
       const departments = Object.keys(formCategories);
 
@@ -207,10 +293,10 @@
         const th = document.createElement("th");
         th.textContent = dept;
         th.style.backgroundColor =
-          dept === "市場部" ? "darkred" :
-          dept === "銷售與營運部" ? "darkblue" :
-          dept === "人力資源及行政部" ? "darkslategray" :
-          dept === "電腦部" ? "darkgreen" : "gray";
+          dept === "市場部" ? "#8B0000" :
+          dept === "銷售與營運部" ? "#00008B" :
+          dept === "人力資源及行政部" ? "#2F4F4F" :
+          dept === "電腦部" ? "#006400" : "#6c757d";
         headerRow.appendChild(th);
       });
       table.appendChild(headerRow);
@@ -224,7 +310,6 @@
         const row = document.createElement("tr");
         departments.forEach(dept => {
           const td = document.createElement("td");
-          td.setAttribute("style", "text-align:left;");
 
           const deptForms = processedCategories[dept];
 
